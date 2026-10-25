@@ -1025,7 +1025,18 @@ export let app = null;
 
 function boot() {
   if (typeof document === 'undefined' || !document.getElementById('board')) return;
-  app = new App();
+  try {
+    app = new App();
+  } catch (err) {
+    // هر خطایی در راه‌اندازی باید دیده شود، نه اینکه صفحه سفید بماند
+    console.error('[تختهٔ پولی] خطای راه‌اندازی:', err);
+    const box = document.createElement('div');
+    box.style.cssText = 'position:fixed;inset:auto 12px 12px 12px;z-index:99;padding:14px 16px;border-radius:14px;' +
+      'background:#2a1207;color:#ffdcb0;border:1px solid #ffb03a;font:600 13px Vazirmatn,Tahoma,sans-serif';
+    box.textContent = 'بازی بالا نیامد: ' + (err && err.message ? err.message : err);
+    document.body.appendChild(box);
+    return;
+  }
   window.app = app;             // برای کنجکاوها و دیباگ
   document.body.classList.remove('boot');
   if (!app.cfg.sound) $('soundBtn').classList.add('off');

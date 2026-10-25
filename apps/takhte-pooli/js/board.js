@@ -22,6 +22,21 @@ const COL = HALF_W / 6;
 const DEPTH = 232;
 const CR = 30;                           // شعاع مهره
 
+/* ── پشتیبانِ roundRect برای سافاری‌های قدیمی (۱۶ به بعد بومی است) ──
+   بدون این، یک TypeError کل تخته را سفید می‌کرد. */
+if (typeof CanvasRenderingContext2D !== 'undefined' && !CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    const rad = (Array.isArray(r) ? r : [r, r, r, r]).map((v) => Math.max(0, Math.min(v || 0, Math.min(w, h) / 2)));
+    const [a, b, c, d] = [rad[0] || 0, rad[1] || rad[0] || 0, rad[2] || rad[0] || 0, rad[3] || rad[1] || rad[0] || 0];
+    this.moveTo(x + a, y);
+    this.lineTo(x + w - b, y); this.quadraticCurveTo(x + w, y, x + w, y + b);
+    this.lineTo(x + w, y + h - c); this.quadraticCurveTo(x + w, y + h, x + w - c, y + h);
+    this.lineTo(x + d, y + h); this.quadraticCurveTo(x, y + h, x, y + h - d);
+    this.lineTo(x, y + a); this.quadraticCurveTo(x, y, x + a, y);
+    return this;
+  };
+}
+
 const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 const easeInOut = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 const clamp01 = (v) => Math.max(0, Math.min(1, v));
