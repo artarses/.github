@@ -1,0 +1,15 @@
+{
+  "name": "takhte-pooli",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "تختهٔ پولی ۵۰٬۰۰۰ — بازی تختهٔ نردِ ایرانی با پول میز، مهلت یک‌روزه و جایزهٔ نقدی نفرات اول تا سوم (نسخهٔ نمایشی، بدون پول واقعی)",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node --test tests/engine.test.mjs tests/structure.test.mjs",
+    "test:ui": "JSDOM_ENTRY=$(node -e \"process.stdout.write(require.resolve('jsdom/lib/api.js'))\") node --test tests/ui.smoke.test.mjs",
+    "test:all": "npm test && npm run test:ui"
+  },
+  "devDependencies": {},
+  "license": "MIT"
+}
