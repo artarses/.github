@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تختهٔ پولی ۵۰٬۰۰۰ — فصلِ یک‌روزهٔ بازار</title>
+<meta name="description" content="بازی تختهٔ نرد ایرانی با پول میز، مهلت یک‌روزه و جایزهٔ نقدی نفرات اول تا سوم — نسخهٔ نمایشی و رایگان.">
+<meta name="theme-color" content="#0a0604">
+<link rel="stylesheet" href="css/app.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231d1209'/%3E%3Cpath d='M6 26 L16 6 L26 26 Z' fill='%23e2ae41'/%3E%3Ccircle cx='16' cy='20' r='3.2' fill='%230e6a60'/%3E%3C/svg%3E">
+</head>
+<body class="boot">
+
+<svg class="svg-defs" aria-hidden="true">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="currentColor" stop-opacity=".65"/>
+      <stop offset="40%" stop-color="currentColor"/>
+      <stop offset="60%" stop-color="#fff8e6"/>
+      <stop offset="100%" stop-color="currentColor" stop-opacity=".75"/>
+    </linearGradient>
+    <symbol id="i-girih" viewBox="0 0 100 100">
+      <path d="M50 4 58 30 84 22 70 46 96 50 70 54 84 78 58 70 50 96 42 70 16 78 30 54 4 50 30 46 16 22 42 30Z"/>
+    </symbol>
+    <symbol id="i-die" viewBox="0 0 100 100">
+      <rect x="8" y="8" width="84" height="84" rx="18" fill="none" stroke="currentColor" stroke-width="7"/>
+      <circle cx="34" cy="34" r="8"/><circle cx="66" cy="66" r="8"/><circle cx="50" cy="50" r="8"/>
+    </symbol>
+  </defs>
+</svg>
+
+<noscript><div style="padding:24px;font:16px Vazirmatn,Tahoma;color:#fff">این بازی برای اجرا به JavaScript نیاز دارد.</div></noscript>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- ══════════════════════════ سربرگ ══════════════════════════ -->
+<header class="top">
+  <div class="brand">
+    <span class="mark"><svg viewBox="0 0 100 100"><use href="#i-girih"/></svg></span>
+    <span class="brand-txt">
+      <b>تختهٔ پولی</b>
+      <i>فصل ۵۰٬۰۰۰ · بازارِ تخته</i>
+    </span>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="table">میز بازی</button>
+    <button class="tab" data-tab="board">جدول زنده</button>
+    <button class="tab" data-tab="stats">آمار من</button>
+    <button class="tab" data-tab="wallet">کیف پول</button>
+    <button class="tab" data-tab="guide">قوانین</button>
+  </nav>
+
+  <div class="hud">
+    <div class="pill phase" id="phasePill"><span class="dot"></span><b>—</b></div>
+
+    <div class="dayclock" id="dayClock" title="مهلت یک‌روزهٔ مسابقه">
+      <svg viewBox="0 0 44 44">
+        <circle class="trk" cx="22" cy="22" r="19"/>
+        <circle class="prg" cx="22" cy="22" r="19" pathLength="1"/>
+      </svg>
+      <div class="dc-txt"><b id="clockTxt">--:--:--</b><i>تا پایان روز</i></div>
+    </div>
+
+    <button class="pill wallet" id="walletPill" title="کیف پول">
+      <span>کیف</span><b id="walletTxt">—</b>
+    </button>
+    <button class="pill rank" id="rankPill" title="جایگاه تو">
+      <span>رتبه</span><b id="rankTxt">—</b><em id="cashTxt">—</em>
+    </button>
+    <button class="icon" id="soundBtn" title="صدا">🔊</button>
+  </div>
+</header>
+
+<!-- ══════════════════════════ هشدار ثبت‌نام ══════════════════════════ -->
+<div class="banner" id="regBanner" hidden>
+  <div class="bn-txt">
+    <b id="regTitle">پنجرهٔ ثبت‌نام باز است</b>
+    <span id="regSub">ورودی ۵۰٬۰۰۰ تومان تا یکشنبه…</span>
+  </div>
+  <button class="btn gold sm" id="regBtn">پرداخت ورودی و ورود به فصل</button>
+  <button class="btn ghost sm" id="regLater">بعداً</button>
+</div>
+
+<main class="stage">
+
+  <!-- ─────────────── میز بازی ─────────────── -->
+  <section class="screen active" id="sc-table">
+    <div class="table-grid">
+
+      <aside class="col left">
+        <div class="card opp" id="oppCard"></div>
+        <div class="card stake" id="stakeCard"></div>
+        <div class="card adv"><h4>کفهٔ بازی</h4><div class="advbar"><i id="advFill"></i><span id="advTxt">—</span></div></div>
+        <div class="card bonus" id="bonusCard"></div>
+      </aside>
+
+      <div class="board-col">
+        <div class="board-head">
+          <div class="bh-theme">
+            <b id="themeName">—</b><span id="themeSub"></span>
+          </div>
+          <div class="bh-meta"><span id="roundMeta">دست ۰</span><span class="sep"></span><span id="modeMeta">—</span></div>
+          <div class="bh-actions">
+            <button class="btn ghost sm" id="swapBtn" title="تخته را عوض کن">🎴 تختهٔ بعدی</button>
+          </div>
+        </div>
+
+        <div class="board-wrap" id="boardWrap">
+          <canvas id="board" width="1080" height="620" aria-label="تختهٔ تخته نرد"></canvas>
+          <div class="board-veil" id="boardVeil"><div class="bv-in"><b>تخته عوض شد</b><span id="veilTheme"></span></div></div>
+          <div class="board-flag" id="turnFlag">نوبت شما · تاس بریز</div>
+        </div>
+
+        <div class="controls">
+          <button class="btn gold big" id="rollBtn">تاس بریز <kbd>Space</kbd></button>
+          <button class="btn" id="doubleBtn">کعب دبل <kbd>D</kbd></button>
+          <button class="btn" id="bearBtn">خارج کردن</button>
+          <button class="btn" id="bestBtn">بهترین حرکت <kbd>B</kbd></button>
+          <button class="btn ghost" id="undoBtn">بازگشت <kbd>U</kbd></button>
+          <button class="btn ghost" id="hintBtn">نظر استاد <kbd>H</kbd></button>
+          <button class="btn danger" id="resignBtn">تسلیم <kbd>R</kbd></button>
+          <div class="moveclock" id="moveClock"><i></i><span>—</span></div>
+        </div>
+
+        <div class="strip" id="gameStrip"></div>
+      </div>
+
+      <aside class="col right">
+        <div class="card logcard">
+          <h4>دفترچهٔ میز <button class="mini" id="clearLog">پاک کردن</button></h4>
+          <ul class="log" id="log"></ul>
+        </div>
+        <div class="card feed">
+          <h4>جریان فصل</h4>
+          <ul id="feed"></ul>
+        </div>
+        <div class="card chat">
+          <h4>گفت‌وگوی سالن</h4>
+          <ul id="chat"></ul>
+          <div class="quick" id="quickChat"></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ─────────────── جدول زنده ─────────────── -->
+  <section class="screen" id="sc-board">
+    <div class="board-grid">
+      <div class="podium" id="podium"></div>
+      <div class="lb-wrap">
+        <div class="lb-head">
+          <h3>جدول زنده — سه نفر با بیشترین پول می‌مانند</h3>
+          <div class="lb-ctrls">
+            <label class="sw"><input type="checkbox" id="onlySolvent" checked> فقط کسانی که پول دارند</label>
+            <span class="hint-txt" id="prizeHint"></span>
+          </div>
+        </div>
+        <div class="lb" id="lb"></div>
+      </div>
+      <aside class="side-panels">
+        <div class="card"><h4>صندوق جوایز</h4><div id="potCard"></div></div>
+        <div class="card"><h4>نتیجهٔ دقایق اخیر</h4><ul class="feed" id="feedFull"></ul></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ─────────────── آمار ─────────────── -->
+  <section class="screen" id="sc-stats">
+    <div class="stats-grid" id="statsGrid"></div>
+  </section>
+
+  <!-- ─────────────── کیف پول ─────────────── -->
+  <section class="screen" id="sc-wallet">
+    <div class="wallet-grid" id="walletGrid"></div>
+  </section>
+
+  <!-- ─────────────── قوانین ─────────────── -->
+  <section class="screen" id="sc-guide">
+    <div class="guide" id="guideBody"></div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span class="note">نسخهٔ نمایشی: هیچ پول واقعی در کار نیست — همهٔ مبالغ، تمرین و «پول میز»ند.</span>
+  <span class="sep"></span>
+  <span id="footSeason">—</span>
+  <span class="sep"></span>
+  <span>ساعت مسابقه: <b id="footSpeed">۱×</b></span>
+  <button class="mini" id="speedBtn">سرعت زمان</button>
+  <button class="mini" id="jumpBtn">پرش به پایان مهلت</button>
+  <button class="mini" id="resetBtn">فصل تازه</button>
+</footer>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<div class="modal" id="modal" hidden><div class="sheet" id="modalSheet"></div></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
